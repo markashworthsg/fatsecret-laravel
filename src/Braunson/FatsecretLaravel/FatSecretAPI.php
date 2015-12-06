@@ -41,7 +41,7 @@ class FatSecretAPI{
 	* @param token {string} The token for the newly created profile is returned here
 	* @param secret {string} The secret for the newly created profile is returned here
 	*/
-	function ProfileCreate($userID, &$token, &$secret){
+	function ProfileCreate($userID){
 		$url = static::$base . 'method=profile.create';
 		
 		if(!empty($userID)){
@@ -52,15 +52,19 @@ class FatSecretAPI{
 
 		$normalizedUrl;
 		$normalizedRequestParameters;
-		
+
 		$signature = $oauth->GenerateSignature($url, $this->_consumerKey, $this->_consumerSecret, null, null, $normalizedUrl, $normalizedRequestParameters);
-		
+
 		$doc = new \SimpleXMLElement($this->GetQueryResponse($normalizedUrl, $normalizedRequestParameters . '&' . OAuthBase::$OAUTH_SIGNATURE . '=' . urlencode($signature)));
 
 		$this->ErrorCheck($doc);
 
-		$token = $doc->auth_token;
-		$secret = $doc->auth_secret;
+        $toksec = array();
+
+        $toksec['token'] = $doc->auth_token;
+        $toksec['secret'] = $doc->auth_secret;
+
+        return $toksec;
 	}
 	
 	/* Get the auth details of a profile
