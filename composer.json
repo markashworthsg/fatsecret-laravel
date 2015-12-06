@@ -8,9 +8,16 @@
             "email": "braunson@geekybeaver.ca"
         }
     ],
+    "repositories":
+        [
+            {
+                "type": "vcs",
+                "url": "https://github.com/markashworthsg/fatsecret-laravel"
+            }
+        ],
     "require": {
         "php": ">=5.4.0",
-	"illuminate/support": "~5.0"
+	    "illuminate/support": "~5.0"
     },
     "autoload": {
         "psr-0": {
