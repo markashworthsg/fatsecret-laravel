@@ -134,6 +134,38 @@ class FatSecretAPI{
 		$sessionKey = $doc->session_key;
 	}
 
+    public function searchRecipes($search_phrase, $page=0, $maxresults=50){
+        $url = static::$base . 'method=recipes.search&format=json&page_number=' . $page .'&max_results=' . $maxresults . '&search_expression=' . $search_phrase;
+
+        $oauth = new OAuthBase();
+
+        $normalizedUrl;
+        $normalizedRequestParameters;
+
+        $signature = $oauth->GenerateSignature($url, $this->_consumerKey, $this->_consumerSecret, null, null, $normalizedUrl, $normalizedRequestParameters);
+        $returnXML = $this->GetQueryResponse($normalizedUrl, $normalizedRequestParameters . '&' . OAuthBase::$OAUTH_SIGNATURE . '=' . urlencode($signature));
+        //$doc = new \SimpleXMLElement($returnXML);
+        //$this->ErrorCheck($doc);
+
+        return json_decode($returnXML, true);
+    }
+
+    function getRecipe($recipe_id){
+        $url = static::$base . 'method=recipe.get&format=json&recipe_id=' . $recipe_id;
+
+        $oauth = new OAuthBase();
+
+        $normalizedUrl;
+        $normalizedRequestParameters;
+
+        $signature = $oauth->GenerateSignature($url, $this->_consumerKey, $this->_consumerSecret, null, null, $normalizedUrl, $normalizedRequestParameters);
+        $returnJson = $this->GetQueryResponse($normalizedUrl, $normalizedRequestParameters . '&' . OAuthBase::$OAUTH_SIGNATURE . '=' . urlencode($signature));
+        //$doc = new SimpleXMLElement($returnXML);
+        //$this->ErrorCheck($doc);
+
+        return json_decode($returnJson, true);
+    }
+
     public function searchIngredients($search_phrase, $page=0, $maxresults=50){
         $url = static::$base . 'method=foods.search&format=json&page_number=' . $page .'&max_results=' . $maxresults . '&search_expression=' . $search_phrase;
 		
